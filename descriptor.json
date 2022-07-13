@@ -1,0 +1,84 @@
+{
+    "name": "MIRA_Widgets_Test_App",
+    "description": "App to test widgets integration.",
+    "container-image": {
+      "image": "lmilldockerhub01/s_mira_widgets_test_app",
+      "type": "singularity",
+      "version": "0.0.1"
+    },
+    "command-line": "[PARAM_IMAGE_ID] [PARAM_ANNOTATION_ID] [CYTOMINE_HOST] [CYTOMINE_PUBLIC_KEY] [CYTOMINE_PRIVATE_KEY] [CYTOMINE_ID_PROJECT] [CYTOMINE_ID_SOFTWARE]",
+    "inputs": [
+      {
+        "id": "param_image_id", 
+        "value-key": "[@ID]",
+        "command-line-flag": "--@id", 
+        "name": "Image", 
+        "description": "A Cytomine domain; here an image instance in the current project",
+        "optional": false, 
+        "type": "Domain",
+        "uri": "/api/project/$currentProject$/imageinstance.json",
+        "uri-print-attribute": "instanceFilename",
+        "uri-sort-attribute": "created"
+      },
+      {
+        "id": "param_annotation_id",
+        "value-key": "[@ID]",
+        "command-line-flag": "--@id",
+        "name": "Annotation ID",
+        "description": "Specify the annotation id.",
+        "optional": true,
+        "type": "Number"
+      },
+      {
+        "id": "cytomine_host", 
+        "value-key": "[@ID]",
+        "command-line-flag": "--@id", 
+        "name": "Cytomine host", 
+        "description": "Mandatory to communicate with Cytomine; automatically filled by server",
+        "set-by-server": true,
+        "optional": false, 
+        "type": "String"
+      },
+      {
+        "id": "cytomine_public_key", 
+        "value-key": "[@ID]",
+        "command-line-flag": "--@id", 
+        "name": "Cytomine public key", 
+        "description": "Mandatory to communicate with Cytomine; automatically filled by server",
+        "set-by-server": true,
+        "optional": false, 
+        "type": "String"
+      },
+      {
+        "id": "cytomine_private_key", 
+        "value-key": "[@ID]",
+        "command-line-flag": "--@id", 
+        "name": "Cytomine public key", 
+        "description": "Mandatory to communicate with Cytomine; automatically filled by server",
+        "set-by-server": true,
+        "optional": false, 
+        "type": "String"
+      },
+      {
+        "id": "cytomine_id_project", 
+        "value-key": "[@ID]",
+        "command-line-flag": "--@id", 
+        "name": "Cytomine project ID", 
+        "description": "Mandatory to communicate with Cytomine; automatically filled by server",
+        "set-by-server": true,
+        "optional": false, 
+        "type": "Number"
+      },
+      {
+        "id": "cytomine_id_software", 
+        "value-key": "[@ID]",
+        "command-line-flag": "--@id", 
+        "name": "Cytomine software ID", 
+        "description": "Mandatory to communicate with Cytomine; automatically filled by server",
+        "set-by-server": true,
+        "optional": false, 
+        "type": "Number"
+      }
+    ], 
+    "schema-version": "cytomine-0.1"
+  }
