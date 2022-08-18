@@ -1,12 +1,12 @@
 {
     "name": "MIRA_Widgets_Test_App",
-    "description": "App to test widgets integration.",
+    "description": "App to test widgets integration",
     "container-image": {
       "image": "lmilldockerhub01/s_mira_widgets_test_app",
       "type": "singularity",
-      "version": "0.0.1"
+      "version": "v0.0.2"
     },
-    "command-line": "[PARAM_IMAGE_ID] [PARAM_ANNOTATION_ID] [CYTOMINE_HOST] [CYTOMINE_PUBLIC_KEY] [CYTOMINE_PRIVATE_KEY] [CYTOMINE_ID_PROJECT] [CYTOMINE_ID_SOFTWARE]",
+    "command-line": "[PARAM_IMAGE_ID] [PARAM_ANNOTATION_ID] [PARAM_DOMAIN] [PARAM_ALGORITHM_CLASS] [CYTOMINE_HOST] [CYTOMINE_PUBLIC_KEY] [CYTOMINE_PRIVATE_KEY] [CYTOMINE_ID_PROJECT] [CYTOMINE_ID_SOFTWARE]",
     "inputs": [
       {
         "id": "param_image_id", 
@@ -28,6 +28,26 @@
         "description": "Specify the annotation id.",
         "optional": true,
         "type": "Number"
+      },
+      {
+        "id": "param_domain",
+        "value-key": "[@ID]",
+        "command-line-flag": "--@id",
+        "name": "Algorithm domain",
+        "description": "List of domains the algorithm can operate on.",
+        "optional": true,
+        "type": "String",
+        "values-choice": ["H&E", "MHCs", "MHCn"]
+      },
+      {
+        "id": "param_algorithm_class",
+        "value-key": "[@ID]",
+        "command-line-flag": "--@id",
+        "name": "Algorithm class",
+        "description": "Definition of the algorithm class.",
+        "optional": true,
+        "type": "String",
+        "default-value": "Segmentation"
       },
       {
         "id": "cytomine_host", 
