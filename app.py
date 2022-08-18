@@ -10,7 +10,7 @@ import cv2
 from skimage import data
 import json
 from PIL import Image
-
+import logging
 
 
 def create_widget_number(title, value, unit, description):
@@ -120,6 +120,24 @@ def main(argv):
         image_instance = ImageInstance().fetch(image_id)
         image_name = image_instance.instanceFilename
 
+        # dummy progress bar test
+        progress = 0
+        n_steps = 10
+        progress_delta = 100 / n_steps
+        for i in range(10):
+            # ATTENTION: progress must be an integer
+            cytomine_job.update(progress=int(progress), statusComment="Analyzing image {}...".format(image_instance.instanceFilename))
+            logging.debug("Image id: %d width: %d height: %d resolution: %f magnification: %d filename: %s", image_id,
+                          image_instance.width, image_instance.height, image_instance.resolution, image_instance.magnification, image_instance.filename)
+
+            # sleep for one second
+            sleep(1)
+            logging.info("Finished processing image %s", image_instance.instanceFilename)
+            progress += progress_delta
+
+        # update to 100%
+        cytomine_job.update(progress=int(progress), statusComment="Analyzing image {}...".format(image_instance.instanceFilename))
+
         # create fake data
         df = create_fake_data(image_name)
 
@@ -182,8 +200,11 @@ def main(argv):
             annotation_file_name = 'annotation_' + str(annotation_id) + '.jpg'
             annotation_save_path = os.path.join(working_path, annotation_file_name)
             annotation = Annotation().fetch(annotation_id)
-            annotation.dump(annotation_save_path)
-            upload_job_data_file(job=cytomine_job, job_filename=annotation_file_name, comment='Annotation / ROI image data.', filepath=annotation_save_path)
+            if isinstance(annotation, bool):
+                print('Annotation id invalid!')
+            else:
+                annotation.dump(annotation_save_path)
+                upload_job_data_file(job=cytomine_job, job_filename=annotation_file_name, comment='Annotation / ROI image data.', filepath=annotation_save_path)
 
         # delete working directory
         shutil.rmtree(working_path, ignore_errors=True)
