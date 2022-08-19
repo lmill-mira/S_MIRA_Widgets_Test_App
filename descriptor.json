@@ -37,7 +37,7 @@
         "description": "List of domains the algorithm can operate on.",
         "optional": true,
         "type": "String",
-        "values-choice": ["H&E", "MHCs", "MHCn"]
+        "default-value": "H&E, MHCs, MHCn"
       },
       {
         "id": "param_algorithm_class",
