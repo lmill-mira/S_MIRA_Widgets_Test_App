@@ -4,9 +4,9 @@
     "container-image": {
       "image": "lmilldockerhub01/s_mira_widgets_test_app",
       "type": "singularity",
-      "version": "v0.0.2"
+      "version": "v0.0.3"
     },
-    "command-line": "[PARAM_IMAGE_ID] [PARAM_ANNOTATION_ID] [PARAM_DOMAIN] [PARAM_ALGORITHM_CLASS] [CYTOMINE_HOST] [CYTOMINE_PUBLIC_KEY] [CYTOMINE_PRIVATE_KEY] [CYTOMINE_ID_PROJECT] [CYTOMINE_ID_SOFTWARE]",
+    "command-line": "[PARAM_IMAGE_ID] [PARAM_ANNOTATION_ID] [PARAM_DOMAIN] [PARAM_ALGORITHM_CLASS] [PARAM_ALGORITHM_TYPE] [CYTOMINE_HOST] [CYTOMINE_PUBLIC_KEY] [CYTOMINE_PRIVATE_KEY] [CYTOMINE_ID_PROJECT] [CYTOMINE_ID_SOFTWARE]",
     "inputs": [
       {
         "id": "param_image_id", 
@@ -48,6 +48,16 @@
         "optional": true,
         "type": "String",
         "default-value": "Segmentation"
+      },
+      {
+        "id": "param_algorithm_type",
+        "value-key": "[@ID]",
+        "command-line-flag": "--@id",
+        "name": "Algorithm type",
+        "description": "Definition of the algorithm type.",
+        "optional": true,
+        "type": "String",
+        "default-value": "Fiber"
       },
       {
         "id": "cytomine_host", 
