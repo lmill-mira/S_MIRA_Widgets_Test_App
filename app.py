@@ -141,16 +141,25 @@ def main(argv):
         # create fake data
         df = create_fake_data(image_name)
 
+        # create fake data
+        df_2 = create_fake_data(image_name)
+
         # create a temp working directory to store file-type app data (i.e. text-files)
         working_path = os.path.join("tmp", str(cytomine_job.id))
         if not os.path.exists(working_path):
             os.makedirs(working_path)
 
         # create the output csv file, save it to the temp folder and upload the file as JobData
-        csv_file_name = 'example_csv_output.csv'
+        csv_file_name = 'algorithm_csv_output_1.csv'
         csv_save_path = os.path.join(working_path, csv_file_name)
         df.to_csv(csv_save_path, index=False, encoding='utf-16')
         upload_job_data_file(job=cytomine_job, job_filename=csv_file_name, comment='Algorithm-generated csv file output.', filepath=csv_save_path)
+
+        # create the output csv file, save it to the temp folder and upload the file as JobData
+        csv_file_name_2 = 'algorithm_csv_output_different_name.csv'
+        csv_save_path = os.path.join(working_path, csv_file_name_2)
+        df_2.to_csv(csv_save_path, index=False, encoding='utf-16')
+        upload_job_data_file(job=cytomine_job, job_filename=csv_file_name_2, comment='Algorithm-generated csv file output.', filepath=csv_save_path)
 
         # create the output excel file, save it to the temp folder and upload the file as JobData
         excel_file_name = 'example_excel_output.xlsx'
@@ -168,13 +177,19 @@ def main(argv):
         mean_area = df['Area [µm²]'].mean()
         number_widget_3 = create_widget_number(title='Mean fiber area', value=mean_area, unit='µm²', description='The mean fiber diameter.')
 
-        histogram_widget = create_widget_histogram(title='Fiber diameter distribution', data_source_file=csv_file_name, data_column_name='Fiber Diameter [µm]', unit='µm',
+        histogram_widget_1 = create_widget_histogram(title='Fiber diameter distribution', data_source_file=csv_file_name, data_column_name='Fiber Diameter [µm]', unit='µm',
                                                    description='Histogram of the fiber diameter distribution.')
+
+        histogram_widget_2 = create_widget_histogram(title='Fiber diameter distribution', data_source_file=csv_file_name_2, data_column_name='Fiber Diameter [µm]', unit='µm',
+                                                   description='A second histogram to display a distribution.')
+
+        number_widget_4 = create_widget_number(title='Ratio Type I / Type II fibers', value=0.55*100, unit='%', description='Ratio of type I to type II.')
 
         # combine and save as widgets.json and upload
         widgets_file_name = 'widgets.json'
         widgets_description_save_path = os.path.join(working_path, widgets_file_name)
-        widgets_dict = create_widgets_description(job_id, [number_widget_1, number_widget_2, number_widget_3, histogram_widget])
+        # widgets_dict = create_widgets_description(job_id, [number_widget_1, number_widget_2, number_widget_3, histogram_widget])
+        widgets_dict = create_widgets_description(job_id, [number_widget_1, number_widget_2, number_widget_3, histogram_widget_1, histogram_widget_2, number_widget_4])
         with open(widgets_description_save_path, 'w', encoding='utf-16') as fp:         # use uft-16 encoding for special characters like 'µ' or '²'
             json.dump(widgets_dict, fp, sort_keys=True, indent=4, ensure_ascii=False)
         upload_job_data_file(job=cytomine_job, job_filename=widgets_file_name, comment='Algorithm-generated widgets description file.', filepath=widgets_description_save_path)

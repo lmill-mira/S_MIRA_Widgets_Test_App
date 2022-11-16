@@ -4,7 +4,7 @@
     "container-image": {
       "image": "lmilldockerhub01/s_mira_widgets_test_app",
       "type": "singularity",
-      "version": "v0.0.6"
+      "version": "v0.0.7"
     },
     "command-line": "[PARAM_IMAGE_ID] [PARAM_ANNOTATION_ID] [PARAM_DOMAIN] [PARAM_ALGORITHM_CLASS] [PARAM_ALGORITHM_TYPE] [CYTOMINE_HOST] [CYTOMINE_PUBLIC_KEY] [CYTOMINE_PRIVATE_KEY] [CYTOMINE_ID_PROJECT] [CYTOMINE_ID_SOFTWARE]",
     "inputs": [
