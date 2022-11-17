@@ -1,4 +1,5 @@
 from cytomine import CytomineJob
+from cytomine.models import AnnotationCollection
 from time import sleep
 import os
 import sys
@@ -10,7 +11,23 @@ import cv2
 from skimage import data
 import json
 from PIL import Image
+from shapely import wkt, affinity
 import logging
+
+
+def create_random_annotation_results(annotation, n_annotations=10, max_scale=0.5, max_translate_px=50):
+    ann_polygon = wkt.loads(annotation.location)
+    anns = AnnotationCollection()
+    for i in range(n_annotations):
+        scale_random = np.random.uniform(0.1, max_scale)
+        polygon_scaled = affinity.scale(ann_polygon, xfact=scale_random, yfact=scale_random, origin='center')
+        xoff, yoff = np.random.uniform(-1*max_translate_px, max_translate_px, (1, 2))[0, :]
+        polygon_scaled_transformed = affinity.translate(polygon_scaled, xoff=xoff, yoff=yoff)
+        rotate_random = np.random.uniform(0.0, 360)
+        polygon_scaled_transformed_rotated = affinity.rotate(polygon_scaled_transformed, rotate_random, origin='center')
+        ann_new = Annotation(location=polygon_scaled_transformed_rotated.wkt, id_image=annotation.image)
+        anns.append(ann_new)
+    anns.save()
 
 
 def create_widget_number(title, value, unit, description):
@@ -144,6 +161,20 @@ def main(argv):
         # create fake data
         df_2 = create_fake_data(image_name)
 
+        # second dummy progress bar test
+        progress = 0
+        n_steps = 15
+        progress_delta = 100 / n_steps
+        for i in range(n_steps):
+            # ATTENTION: progress must be an integer
+            cytomine_job.update(progress=int(progress), statusComment="Second progress...")
+            logging.debug('Second progess debug log: ' + str(progress))
+
+            # sleep for one second
+            sleep(1)
+            logging.info("Finished processing image %s", image_instance.instanceFilename)
+            progress += progress_delta
+
         # create a temp working directory to store file-type app data (i.e. text-files)
         working_path = os.path.join("tmp", str(cytomine_job.id))
         if not os.path.exists(working_path):
@@ -220,6 +251,9 @@ def main(argv):
             else:
                 annotation.dump(annotation_save_path)
                 upload_job_data_file(job=cytomine_job, job_filename=annotation_file_name, comment='Annotation / ROI image data.', filepath=annotation_save_path)
+
+                # draw random annotations
+                create_random_annotation_results(annotation, n_annotations=10, max_scale=0.8, max_translate_px=100)
 
         # delete working directory
         shutil.rmtree(working_path, ignore_errors=True)
