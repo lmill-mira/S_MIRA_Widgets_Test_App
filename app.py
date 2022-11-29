@@ -211,7 +211,7 @@ def main(argv):
         histogram_widget_1 = create_widget_histogram(title='Fiber diameter distribution', data_source_file=csv_file_name, data_column_name='Fiber Diameter [µm]', unit='µm',
                                                    description='Histogram of the fiber diameter distribution.')
 
-        histogram_widget_2 = create_widget_histogram(title='Fiber diameter distribution', data_source_file=csv_file_name_2, data_column_name='Fiber Diameter [µm]', unit='µm',
+        histogram_widget_2 = create_widget_histogram(title='Fiber diameter distribution', data_source_file=csv_file_name_2, data_column_name='Area [px]', unit='px',
                                                    description='A second histogram to display a distribution.')
 
         number_widget_4 = create_widget_number(title='Ratio Type I / Type II fibers', value=0.55*100, unit='%', description='Ratio of type I to type II.')
