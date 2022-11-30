@@ -124,6 +124,37 @@ def create_fake_data(image_name):
     return df
 
 
+def create_fake_data2(image_name):
+    n_rows = int(np.random.uniform(1000, 8000))
+    um_per_px = 0.6614
+
+    # create a column with image name
+    image_name_list = [image_name]
+    column_name = np.array(image_name_list * n_rows).reshape(n_rows, 1)
+
+    # create a column with fake fiber ids
+    column_fiber_ids = np.arange(1, n_rows+1, dtype=int).reshape(n_rows, 1)
+
+    # create a column with fake area sizes in px
+    mu, sigma = 6228, 5000
+    column_areas_px = np.abs(np.random.normal(mu, sigma, size=(n_rows, 1)))
+    column_areas_um = np.abs(np.random.normal(mu, sigma, size=(n_rows, 1))) * um_per_px**2
+
+    # create a column with fake diameter sizes in px
+    mu, sigma = 47, 20
+    column_diameters_px = np.abs(np.random.normal(mu, sigma, size=(n_rows, 1)))
+    column_diameters_um = np.abs(np.random.normal(mu, sigma, size=(n_rows, 1))) * um_per_px
+
+    # concatenate all columns
+    data = np.concatenate((column_fiber_ids, column_areas_px, column_areas_um, column_diameters_px, column_diameters_um), axis=1)
+
+    # create a pandas DataFrame
+    df = pd.DataFrame(data=data, columns=['Fiber ID', 'Area [px]', 'Area [µm²]', 'Diameter [px]', 'Diameter [µm]'])
+    df.insert(loc=0, column='Image name', value=column_name)
+
+    return df
+
+
 def main(argv):
     with CytomineJob.from_cli(argv) as cytj:
         # retrieve parameters
@@ -159,7 +190,7 @@ def main(argv):
         df = create_fake_data(image_name)
 
         # create fake data
-        df_2 = create_fake_data(image_name)
+        df_2 = create_fake_data2(image_name)
 
         # second dummy progress bar test
         progress = 0
@@ -211,7 +242,7 @@ def main(argv):
         histogram_widget_1 = create_widget_histogram(title='Fiber diameter distribution', data_source_file=csv_file_name, data_column_name='Fiber Diameter [µm]', unit='µm',
                                                    description='Histogram of the fiber diameter distribution.')
 
-        histogram_widget_2 = create_widget_histogram(title='Fiber diameter distribution', data_source_file=csv_file_name_2, data_column_name='Area [px]', unit='px',
+        histogram_widget_2 = create_widget_histogram(title='Fiber area distribution', data_source_file=csv_file_name_2, data_column_name='Area [px]', unit='px',
                                                    description='A second histogram to display a distribution.')
 
         number_widget_4 = create_widget_number(title='Ratio Type I / Type II fibers', value=0.55*100, unit='%', description='Ratio of type I to type II.')
